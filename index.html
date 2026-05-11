@@ -556,7 +556,7 @@
   }
   .moment {
     padding: 2rem;
-    background: #F2EFE9;
+    background: #ECECEC;
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 6px;
   }
@@ -743,7 +743,7 @@
   }
   .summary-block {
     padding: 1.5rem 1.75rem;
-    background: #F2EFE9;
+    background: #ECECEC;
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 6px;
   }
@@ -875,6 +875,14 @@
   .btn-primary:hover {
     background: #222;
     border-color: #222;
+  }
+  .btn-primary:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .btn-primary:disabled:hover {
+    background: var(--black);
+    border-color: var(--black);
   }
   .btn-secondary {
     background: transparent;
@@ -1191,11 +1199,11 @@
     <div class="confirm">
       <h3>Ready to send this to us?</h3>
       <p>Once you submit, we'll get a notification and review your music preferences ahead of our next meeting. You can still change things later.</p>
-      <button type="button" class="btn-primary" onclick="submitBrief()">Submit to your videographer</button>
     </div>
 
     <div class="btn-row">
       <button type="button" class="btn-secondary" onclick="goTo(3)">← Back</button>
+      <button type="button" class="btn-primary" id="submitBtn" onclick="submitBrief()">Submit to your videographer</button>
     </div>
   </section>
 
@@ -1326,6 +1334,14 @@
         document.querySelector('.confirm').innerHTML =
           '<h3>Brief sent.</h3>' +
           "<p>We've received your music selections and will be in touch before your next call.</p>";
+        /* Disable the submit button (now in the footer .btn-row,
+           outside .confirm) so a successful send can't fire a
+           duplicate request. */
+        var btn = document.getElementById('submitBtn');
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Sent';
+        }
       })
       .catch(function () {
         alert('Something went wrong. Please email us your brief directly.');
