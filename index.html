@@ -556,7 +556,7 @@
   }
   .moment {
     padding: 2rem;
-    background: #F7F4EE;
+    background: #F2EFE9;
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 6px;
   }
@@ -729,23 +729,36 @@
   }
 
   /* ============================================================
-     Review screen — summary + confirm
+     Review screen — summary cards + confirm
+     Each summary-block sits in its own warm-grey card so the
+     review reads as a series of discrete, editable sections.
+     Same card register as Step 4's moment cards, distinct from
+     the warm color blocks on Step 2.
      ============================================================ */
   .summary {
     margin: 2rem 0;
-    padding: 2rem 0;
-    border-top: 1px solid var(--rule-strong);
-    border-bottom: 1px solid var(--rule-strong);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
   .summary-block {
-    margin-bottom: 1.5rem;
+    padding: 1.5rem 1.75rem;
+    background: #F2EFE9;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
   }
-  .summary-block:last-child {
-    margin-bottom: 0;
+  /* Header row at the top of each block: eyebrow on the left,
+     optional Edit link on the right. Aligned by baseline so the
+     two read as a single typographic row. */
+  .summary-block-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
   }
   .summary-label {
     display: block;
-    margin-bottom: 0.75rem;
     font-family: var(--sans);
     font-size: 11px;
     font-weight: 500;
@@ -753,16 +766,43 @@
     text-transform: uppercase;
     color: var(--mid);
   }
+  /* Edit link — quiet sans link, hover darkens. Only the film
+     summary blocks (Highlight, Social) get one in JS; "Your
+     details" doesn't because its input is on the same screen
+     above the summary. */
+  .summary-edit {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-soft);
+    color: var(--mid);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease);
+  }
+  .summary-edit:hover {
+    color: var(--black);
+  }
   .summary-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
     padding: 0.625rem 0;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+  }
+  .summary-row:first-of-type {
+    border-top: none;
+    padding-top: 0;
   }
   .summary-row:last-child {
-    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0;
   }
   .summary-row-key {
     flex: 0 0 auto;
@@ -774,7 +814,7 @@
     flex: 1;
     text-align: right;
     font-family: var(--serif);
-    font-size: 14px;
+    font-size: 15px;
     color: var(--black);
   }
 
@@ -1210,17 +1250,25 @@
     var socialNotes = socialData.notes || 'None';
     box.innerHTML =
       '<div class="summary-block">' +
+      '<div class="summary-block-header">' +
       '<span class="summary-label">Your details</span>' +
+      '</div>' +
       '<div class="summary-row"><span class="summary-row-key">Names</span><span class="summary-row-val">' + names + '</span></div>' +
       '<div class="summary-row"><span class="summary-row-key">Wedding date</span><span class="summary-row-val">' + date + '</span></div>' +
       '</div>' +
       '<div class="summary-block">' +
+      '<div class="summary-block-header">' +
       '<span class="summary-label">Highlight film</span>' +
+      '<button type="button" class="summary-edit" onclick="goTo(3)">Edit</button>' +
+      '</div>' +
       '<div class="summary-row"><span class="summary-row-key">Song ideas</span><span class="summary-row-val">' + highlightSongs + '</span></div>' +
       '<div class="summary-row"><span class="summary-row-key">Mood / vibe</span><span class="summary-row-val">' + highlightMood + '</span></div>' +
       '</div>' +
       '<div class="summary-block">' +
+      '<div class="summary-block-header">' +
       '<span class="summary-label">Social film</span>' +
+      '<button type="button" class="summary-edit" onclick="goTo(3)">Edit</button>' +
+      '</div>' +
       '<div class="summary-row"><span class="summary-row-key">Song request</span><span class="summary-row-val">' + socialSong + '</span></div>' +
       '<div class="summary-row"><span class="summary-row-key">Notes</span><span class="summary-row-val">' + socialNotes + '</span></div>' +
       '</div>';
