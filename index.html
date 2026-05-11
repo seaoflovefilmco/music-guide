@@ -191,20 +191,25 @@
   }
 
   /* ============================================================
-     Alert block — tonal surface, no card chrome
+     Alert block — warning register
+     Soft cream surface with a deep amber accent strip on the
+     left. Editorial, not an alert banner; no icon. The accent
+     hex is tied to the title colour so the semantic signal
+     reads at a glance.
      ============================================================ */
   .alert {
     margin: 2rem 0;
     padding: 1.5rem 1.75rem;
-    background: var(--bg-tonal);
-    border-left: 2px solid var(--black);
+    background: #FAF2E0;
+    border-left: 4px solid #8C6B27;
+    border-radius: 4px;
   }
   .alert-title {
     margin: 0 0 0.4rem;
     font-family: var(--serif);
     font-size: 18px;
     font-weight: 500;
-    color: var(--black);
+    color: #8C6B27;
   }
   .alert-body {
     margin: 0;
@@ -267,20 +272,35 @@
 
   /* ============================================================
      Comparison — Cannot use / Can use
-     Two flat columns, eyebrow titles, hairline-separated items.
-     No coloured backgrounds.
+     Two color-coded blocks. Color IS the semantic signal: blush
+     for can't-use (terracotta accent), sage for can-use (forest
+     green accent). Editorial, not alert banners — no icons.
+     Column title takes the accent colour so the hierarchy reads
+     at a glance.
      ============================================================ */
   .comparison {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
     margin: 2rem 0;
   }
   @media (min-width: 640px) {
     .comparison {
       grid-template-columns: 1fr 1fr;
-      column-gap: 2rem;
+      column-gap: 1.5rem;
     }
+  }
+  .comparison-col {
+    padding: 1.5rem 1.75rem;
+    border-radius: 4px;
+  }
+  .comparison-col--cannot {
+    background: #FBEFEF;
+    border-left: 4px solid #A8453C;
+  }
+  .comparison-col--can {
+    background: #EFF3ED;
+    border-left: 4px solid #3D6B4F;
   }
   .comparison-col-title {
     display: block;
@@ -292,20 +312,30 @@
     text-transform: uppercase;
     color: var(--mid);
   }
+  .comparison-col--cannot .comparison-col-title {
+    color: #A8453C;
+  }
+  .comparison-col--can .comparison-col-title {
+    color: #3D6B4F;
+  }
   .comparison-list {
     margin: 0;
     padding: 0;
     list-style: none;
   }
   .comparison-list li {
-    padding: 0.625rem 0;
-    border-top: 1px solid var(--rule);
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     font-family: var(--sans);
     font-size: 14px;
     color: var(--fg-prose);
   }
+  .comparison-list li:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
   .comparison-list li:last-child {
-    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0;
   }
 
   /* ============================================================
@@ -512,17 +542,33 @@
   }
 
   /* ============================================================
-     Moment sections — input groupings for highlight + social
+     Moment sections — input groupings for highlight + social +
+     review's "Your details". Warm-tinted card containers so the
+     interactive region is visually distinct from the page body.
+     Subtle hairline border for definition; the tint does the
+     primary signalling work.
      ============================================================ */
   .moment-sections {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 1.5rem;
     margin: 2.5rem 0;
   }
   .moment {
-    padding-top: 2rem;
-    border-top: 1px solid var(--rule-strong);
+    padding: 2rem;
+    background: #F7F4EE;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+  }
+  .moment-eyebrow {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-eyebrow-wide);
+    text-transform: uppercase;
+    color: var(--mid);
   }
   .moment-header {
     margin-bottom: 1.5rem;
@@ -556,15 +602,18 @@
     display: flex;
     flex-direction: column;
   }
+  /* Labels slightly more prominent than default eyebrow style —
+     weight 500 + black colour — so input groupings inside the
+     tinted card region read as actionable. */
   .field-label {
     display: block;
     margin-bottom: 0.5rem;
     font-family: var(--sans);
     font-size: 11px;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
-    color: var(--mid);
+    color: var(--black);
   }
   .field-hint {
     margin-top: 0.5rem;
@@ -890,7 +939,7 @@
     <p>The difference is simple. Commercial music is made to be sold and streamed. Licensed music is made specifically for use in video, with the rights already cleared.</p>
 
     <div class="comparison">
-      <div class="comparison-col">
+      <div class="comparison-col comparison-col--cannot">
         <span class="comparison-col-title">Cannot use</span>
         <ul class="comparison-list">
           <li>Spotify / Apple Music tracks</li>
@@ -900,7 +949,7 @@
           <li>Live band recordings</li>
         </ul>
       </div>
-      <div class="comparison-col">
+      <div class="comparison-col comparison-col--can">
         <span class="comparison-col-title">Can use</span>
         <ul class="comparison-list">
           <li>Artlist licensed tracks</li>
@@ -949,7 +998,7 @@
       <article class="browse-row">
         <div class="browse-row-top">
           <span class="browse-name">
-            <img src="https://www.musicbed.com/favicon.ico" alt="" width="16" height="16" onerror="this.style.display='none'" />
+            <img src="https://www.google.com/s2/favicons?domain=musicbed.com&amp;sz=64" alt="" width="16" height="16" onerror="this.style.display='none'" />
             Musicbed
           </span>
           <a class="browse-link" href="https://www.musicbed.com/search" target="_blank" rel="noopener noreferrer">Browse Musicbed ↗</a>
@@ -961,7 +1010,7 @@
       <article class="browse-row">
         <div class="browse-row-top">
           <span class="browse-name">
-            <img src="https://www.epidemicsound.com/favicon.ico" alt="" width="16" height="16" onerror="this.style.display='none'" />
+            <img src="https://www.google.com/s2/favicons?domain=epidemicsound.com&amp;sz=64" alt="" width="16" height="16" onerror="this.style.display='none'" />
             Epidemic Sound
           </span>
           <a class="browse-link" href="https://www.epidemicsound.com/music/wedding/" target="_blank" rel="noopener noreferrer">Browse Epidemic ↗</a>
@@ -973,7 +1022,7 @@
       <article class="browse-row">
         <div class="browse-row-top">
           <span class="browse-name">
-            <img src="https://artlist.io/favicon.ico" alt="" width="16" height="16" onerror="this.style.display='none'" />
+            <img src="https://www.google.com/s2/favicons?domain=artlist.io&amp;sz=64" alt="" width="16" height="16" onerror="this.style.display='none'" />
             Artlist
           </span>
           <a class="browse-link" href="https://artlist.io/music" target="_blank" rel="noopener noreferrer">Browse Artlist ↗</a>
@@ -1016,6 +1065,7 @@
     <div class="moment-sections">
       <div class="moment">
         <header class="moment-header">
+          <span class="moment-eyebrow">Your selection</span>
           <h3 class="moment-title">Highlight film — your song choices</h3>
           <p class="moment-sub">Paste a link or just type the song name and artist</p>
         </header>
@@ -1045,6 +1095,7 @@
 
       <div class="moment">
         <header class="moment-header">
+          <span class="moment-eyebrow">Your selection</span>
           <h3 class="moment-title">Social film — your song, your choice</h3>
           <p class="moment-sub">Any song from Instagram's library works here</p>
         </header>
