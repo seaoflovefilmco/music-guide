@@ -59,10 +59,14 @@
   }
 
   body {
-    font-family: var(--serif);
-    font-size: 17px;
+    /* DM Sans body — Cormorant Garamond is reserved for the
+       large display headings (page h2, moment-title section
+       heads, confirm h3, decorative italic numerals). DM Sans
+       reads materially better at body-copy sizes. */
+    font-family: var(--sans);
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.7;
+    line-height: 1.65;
     color: var(--black);
     background: var(--white);
     min-height: 100vh;
@@ -160,7 +164,12 @@
   .screen h2 em {
     font-style: italic;
   }
-  .screen h3 {
+  /* :where() drops specificity to (0,0,1) so class-based h3
+     rules (.film-title sans, .moment-title serif, .confirm h3
+     serif) can override the default cleanly. Without :where(),
+     the descendant selector `.screen h3` (0,1,1) outweighs any
+     class-only rule on an h3 inside .screen. */
+  :where(.screen) h3 {
     margin: 0 0 0.75rem;
     font-family: var(--serif);
     font-size: clamp(22px, 2.6vw, 28px);
@@ -177,10 +186,10 @@
      serif by this rule. */
   :where(.screen) p {
     margin: 0 0 1.25rem;
-    font-family: var(--serif);
-    font-size: 17px;
+    font-family: var(--sans);
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.7;
+    line-height: 1.65;
     color: var(--fg-prose);
   }
   :where(.screen) p:last-of-type {
@@ -213,16 +222,16 @@
   }
   .alert-title {
     margin: 0 0 0.4rem;
-    font-family: var(--serif);
-    font-size: 18px;
+    font-family: var(--sans);
+    font-size: 16px;
     font-weight: 500;
     color: #8C6B27;
   }
   .alert-body {
     margin: 0;
-    font-family: var(--serif);
-    font-size: 15px;
-    line-height: 1.6;
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
     color: var(--fg-prose);
   }
 
@@ -263,16 +272,16 @@
   }
   .reason h4 {
     margin: 0 0 0.4rem;
-    font-family: var(--serif);
-    font-size: 18px;
+    font-family: var(--sans);
+    font-size: 16px;
     font-weight: 500;
     line-height: 1.3;
     color: var(--black);
   }
   .reason p {
     margin: 0;
-    font-family: var(--serif);
-    font-size: 15px;
+    font-family: var(--sans);
+    font-size: 14px;
     line-height: 1.55;
     color: var(--fg-prose);
   }
@@ -393,14 +402,14 @@
   .platform-name {
     display: block;
     margin-bottom: 0.4rem;
-    font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 400;
+    font-family: var(--sans);
+    font-size: 17px;
+    font-weight: 500;
     color: var(--black);
   }
   .platform-desc {
     margin: 0;
-    font-family: var(--serif);
+    font-family: var(--sans);
     font-size: 14px;
     line-height: 1.5;
     color: var(--fg-prose);
@@ -431,9 +440,9 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 400;
+    font-family: var(--sans);
+    font-size: 17px;
+    font-weight: 500;
     color: var(--black);
   }
   .browse-name img {
@@ -466,9 +475,9 @@
   }
   .browse-desc {
     margin: 0 0 0.5rem;
-    font-family: var(--serif);
-    font-size: 15px;
-    line-height: 1.6;
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
     color: var(--fg-prose);
   }
   .browse-tags {
@@ -498,9 +507,9 @@
   }
   .tip-body {
     margin: 0;
-    font-family: var(--serif);
-    font-size: 15px;
-    line-height: 1.6;
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
     color: var(--fg-prose);
   }
 
@@ -534,15 +543,15 @@
   }
   .film-title {
     margin: 0 0 0.5rem;
-    font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1.2;
+    font-family: var(--sans);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.3;
     color: var(--black);
   }
   .film-desc {
     margin: 0;
-    font-family: var(--serif);
+    font-family: var(--sans);
     font-size: 14px;
     line-height: 1.55;
     color: var(--fg-prose);
@@ -566,6 +575,18 @@
     background: #ECECEC;
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 6px;
+  }
+  /* Intro paragraphs that sit between the moment header and the
+     form (Social Film's licensing note is the only current case)
+     pick up margin-bottom: 0 from the global
+     `:where(.screen) p:last-of-type` rule because they are the
+     last <p> inside the .moment. Restore breathing room here so
+     the first form label doesn't crash into the paragraph above. */
+  .moment > p {
+    margin-bottom: 1.5rem;
+  }
+  .moment > p:last-child {
+    margin-bottom: 0;
   }
   .moment-eyebrow {
     display: block;
@@ -637,8 +658,8 @@
     border: none;
     border-bottom: 1px solid var(--rule-strong);
     background: transparent;
-    font-family: var(--serif);
-    font-size: 17px;
+    font-family: var(--sans);
+    font-size: 16px;
     font-weight: 400;
     line-height: 1.4;
     color: var(--black);
@@ -696,8 +717,8 @@
   }
   .leave-it-title {
     display: block;
-    font-family: var(--serif);
-    font-size: 16px;
+    font-family: var(--sans);
+    font-size: 15px;
     font-weight: 500;
     color: var(--black);
     margin-bottom: 0.15rem;
@@ -820,8 +841,8 @@
   .summary-row-val {
     flex: 1;
     text-align: right;
-    font-family: var(--serif);
-    font-size: 15px;
+    font-family: var(--sans);
+    font-size: 14px;
     color: var(--black);
   }
 
@@ -840,9 +861,9 @@
   .confirm p {
     margin: 0 auto 1.5rem;
     max-width: 480px;
-    font-family: var(--serif);
-    font-size: 15px;
-    line-height: 1.6;
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.55;
     color: var(--fg-prose);
   }
 
@@ -1198,11 +1219,21 @@
         <div class="form-stack">
           <div class="field">
             <label class="field-label" for="coupleNames">Your names</label>
-            <input type="text" id="coupleNames" placeholder="e.g. Sarah &amp; James" oninput="coupleData.names=this.value" />
+            <input
+              type="text"
+              id="coupleNames"
+              placeholder="e.g. Sarah &amp; James"
+              oninput="coupleData.names=this.value;onCoupleChange();"
+            />
           </div>
           <div class="field">
             <label class="field-label" for="weddingDate">Wedding date</label>
-            <input type="date" id="weddingDate" oninput="coupleData.date=this.value" />
+            <input
+              type="date"
+              id="weddingDate"
+              oninput="coupleData.date=this.value;onCoupleChange();"
+              onchange="coupleData.date=this.value;onCoupleChange();"
+            />
           </div>
         </div>
       </div>
@@ -1217,7 +1248,7 @@
 
     <div class="btn-row">
       <button type="button" class="btn-secondary" onclick="goTo(3)">← Back</button>
-      <button type="button" class="btn-primary" id="submitBtn" onclick="submitBrief()">Submit to your videographer</button>
+      <button type="button" class="btn-primary" id="submitBtn" onclick="submitBrief()" disabled>Submit to your videographer</button>
     </div>
   </section>
 
@@ -1260,8 +1291,32 @@
     row.setAttribute('aria-pressed', highlightData.leaveIt ? 'true' : 'false');
   }
 
+  /* Called from the Your Details inputs (oninput / onchange).
+     Re-renders the live summary AND re-checks whether the submit
+     button can be enabled. The Your Details inputs and the
+     summary both live on Screen 4, so typing in the inputs
+     should update the summary in real time — the previous
+     binding only set state, never re-rendered. */
+  function onCoupleChange() {
+    buildSummary();
+    updateSubmitState();
+  }
+
+  /* Submit button gating: stays disabled until both names + a
+     valid wedding date are filled. Highlight Film / Social Film
+     inputs aren't required to submit because either screen can
+     legitimately be left blank (we'll choose for them) — only
+     the couple identity is a hard requirement. */
+  function updateSubmitState() {
+    var btn = document.getElementById('submitBtn');
+    if (!btn) return;
+    var ready = !!(coupleData.names && coupleData.names.trim()) && !!coupleData.date;
+    btn.disabled = !ready;
+  }
+
   function buildSummary() {
     var box = document.getElementById('summaryBox');
+    if (!box) return;
     var names = coupleData.names || 'Not provided';
     var date = coupleData.date
       ? new Date(coupleData.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -1294,6 +1349,11 @@
       '<div class="summary-row"><span class="summary-row-key">Song request</span><span class="summary-row-val">' + socialSong + '</span></div>' +
       '<div class="summary-row"><span class="summary-row-key">Notes</span><span class="summary-row-val">' + socialNotes + '</span></div>' +
       '</div>';
+    /* Keep submit gating in sync with the rendered summary so
+       the button can flip enabled the moment both fields are
+       valid, regardless of whether the user typed on Screen 4
+       or arrived with state already in memory. */
+    updateSubmitState();
   }
 
   function getBriefText() {
