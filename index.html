@@ -929,6 +929,68 @@
   }
 
   /* ============================================================
+     Success screen — full-viewport confirmation after submit
+     Centred vertically against ~70vh so the message sits in the
+     reader's eyeline rather than hugging the top. A short hairline
+     above the title is the editorial flourish — matches the
+     `.summary-row` + `.btn-row` border-tops used throughout, so
+     the page doesn't suddenly introduce a new ornament register
+     (no ticks, no confetti).
+     ============================================================ */
+  .success-screen.visible {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 70vh;
+  }
+  .success-state {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .success-rule {
+    display: block;
+    width: 48px;
+    height: 1px;
+    margin: 0 auto 2rem;
+    background: var(--rule-strong);
+  }
+  .success-title {
+    margin: 0 0 1rem;
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: var(--tracking-snug);
+    color: var(--black);
+  }
+  .success-title em {
+    font-style: italic;
+  }
+  .success-body {
+    margin: 0 0 2rem;
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--fg-prose);
+  }
+  .success-link {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-soft);
+    color: var(--mid);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    transition: color var(--duration-fast) var(--ease);
+  }
+  .success-link:hover {
+    color: var(--black);
+  }
+
+  /* ============================================================
      Mobile
      ============================================================ */
   @media (max-width: 600px) {
@@ -1252,6 +1314,20 @@
     </div>
   </section>
 
+  <!-- Screen success: full-page confirmation after a successful
+       submit. Sits as a sibling of the numbered screens so the
+       existing .screen visibility plumbing treats it like any
+       other step — the only difference is the progress bar hides
+       because the journey is finished. -->
+  <section class="screen success-screen" id="screenSuccess">
+    <div class="success-state">
+      <span class="success-rule" aria-hidden="true"></span>
+      <h2 class="success-title">Brief <em>sent.</em></h2>
+      <p class="success-body">We've received your music selections and will be in touch before your next call.</p>
+      <a class="success-link" href="https://seaoflovefilm.co">Back to seaoflovefilm.co</a>
+    </div>
+  </section>
+
 </div>
 
 <script>
@@ -1378,6 +1454,23 @@
     ].join('\n');
   }
 
+  /* Full-page success state — hides every numbered screen and
+     the progress bar, then surfaces the dedicated #screenSuccess.
+     The dedicated screen has its own .visible styles that take
+     over the viewport and centre the message, so this is the
+     only end-of-flow handler needed; no inline DOM rewriting of
+     the .confirm block like the old "Brief sent." path did. */
+  function showSuccess() {
+    document.querySelectorAll('.screen').forEach(function (s) {
+      s.classList.remove('visible');
+    });
+    var successEl = document.getElementById('screenSuccess');
+    if (successEl) successEl.classList.add('visible');
+    var bar = document.getElementById('progressBar');
+    if (bar) bar.style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   function submitBrief() {
     var FORM_ENDPOINT = 'https://formspree.io/f/xzdylyeb';
     var date = coupleData.date
@@ -1405,17 +1498,7 @@
       body: JSON.stringify(payload),
     })
       .then(function () {
-        document.querySelector('.confirm').innerHTML =
-          '<h3>Brief sent.</h3>' +
-          "<p>We've received your music selections and will be in touch before your next call.</p>";
-        /* Disable the submit button (now in the footer .btn-row,
-           outside .confirm) so a successful send can't fire a
-           duplicate request. */
-        var btn = document.getElementById('submitBtn');
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = 'Sent';
-        }
+        showSuccess();
       })
       .catch(function () {
         alert('Something went wrong. Please email us your brief directly.');
