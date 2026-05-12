@@ -991,6 +991,80 @@
   }
 
   /* ============================================================
+     Mobile — progress bar scroll behaviour
+     Under 640px the five-step strip can't fit one row without
+     truncating tab labels. Switch to a horizontal scroll with
+     snap, larger tap targets, and a fade mask hint on the edges
+     so the affordance reads. The fade mask classes
+     (.has-overflow-left / -right) are toggled by JS depending on
+     scroll position; the CSS rule order resolves the combined
+     "both edges" state via higher specificity.
+     ============================================================ */
+  @media (max-width: 640px) {
+    .progress-step {
+      /* `flex: 0 0 auto` instead of `1 0 auto` — tabs no longer
+         try to share the bar width equally; each sits at its
+         natural label width so nothing truncates. */
+      flex: 0 0 auto;
+      padding: 16px 1rem;
+      min-height: 44px;             /* HIG-comfortable tap target */
+      scroll-snap-align: start;
+    }
+    .progress-bar {
+      scroll-snap-type: x mandatory;
+    }
+    /* Edge fades. Default state (at the left edge of scroll) shows
+       a right-side fade so the user sees there's more content.
+       Once scrolled past start, JS adds .has-overflow-left and a
+       left fade joins. At the far right, .has-overflow-right comes
+       off and the right fade disappears. */
+    .progress-bar.has-overflow-right {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        black 0,
+        black calc(100% - 32px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        black 0,
+        black calc(100% - 32px),
+        transparent 100%
+      );
+    }
+    .progress-bar.has-overflow-left.has-overflow-right {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black 32px,
+        black calc(100% - 32px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black 32px,
+        black calc(100% - 32px),
+        transparent 100%
+      );
+    }
+    .progress-bar.has-overflow-left:not(.has-overflow-right) {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black 32px,
+        black 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        black 32px,
+        black 100%
+      );
+    }
+  }
+
+  /* ============================================================
      Mobile
      ============================================================ */
   @media (max-width: 600px) {
@@ -999,11 +1073,6 @@
     }
     .progress-bar {
       margin-bottom: 2.5rem;
-    }
-    .progress-step {
-      font-size: 10px;
-      padding: 11px 8px;
-      letter-spacing: 0.12em;
     }
     .screen h2 {
       font-size: clamp(28px, 8vw, 38px);
@@ -1351,9 +1420,46 @@
         s.setAttribute('aria-current', 'page');
       }
     });
+    scrollActiveTabIntoView(n);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (n === 4) buildSummary();
   }
+
+  /* Brings the active tab into view inside the (mobile-only)
+     scrollable progress bar. Centred horizontally with
+     block:'nearest' so the page itself doesn't get pulled into a
+     vertical re-scroll (goTo also calls window.scrollTo({top:0})
+     separately and we want those to be independent). Gated to the
+     <=640px breakpoint — desktop keeps the static tab strip and
+     would otherwise do an unnecessary scroll. */
+  function scrollActiveTabIntoView(n) {
+    if (!window.matchMedia || !window.matchMedia('(max-width: 640px)').matches) return;
+    var tab = document.querySelectorAll('.progress-step')[n];
+    if (!tab || !tab.scrollIntoView) return;
+    tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  /* Toggles edge-fade classes on the progress bar based on its
+     scroll position. has-overflow-left appears when scrolled past
+     the start; has-overflow-right disappears when scrolled to the
+     end. CSS uses these to swap mask-image gradients. Fires on
+     scroll (passive), resize, and initial load. */
+  function updateProgressBarOverflow() {
+    var bar = document.getElementById('progressBar');
+    if (!bar) return;
+    var atStart = bar.scrollLeft <= 1;
+    var atEnd = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 1;
+    bar.classList.toggle('has-overflow-left', !atStart);
+    bar.classList.toggle('has-overflow-right', !atEnd);
+  }
+  (function initProgressBarOverflow() {
+    var bar = document.getElementById('progressBar');
+    if (!bar) return;
+    bar.addEventListener('scroll', updateProgressBarOverflow, { passive: true });
+    window.addEventListener('resize', updateProgressBarOverflow);
+    /* Run on next frame so the layout's settled before measuring. */
+    requestAnimationFrame(updateProgressBarOverflow);
+  })();
 
   function selectPlatform(el) {
     document.querySelectorAll('.platform').forEach(function (c) { c.classList.remove('selected'); });
