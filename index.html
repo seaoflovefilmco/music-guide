@@ -8,16 +8,34 @@
 
 <!--
   Design system aligned to the main Sea of Love site (Astro project),
-  the welcome guide, and the pricing page. Cormorant Garamond stands
-  in for Season Mix (paid foundry font); DM Sans matches the main
-  site's sans exactly.
+  the welcome guide, and the pricing page. Season Mix (self-hosted,
+  Regular weight) is the display serif; Stavok Grotesque is the
+  eyebrow font; DM Sans is the body/UI sans. No italic in this build.
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap">
 
 <style>
+  /* ============================================================
+     Self-hosted brand fonts
+     ============================================================ */
+  @font-face {
+    font-family: 'Season Mix';
+    src: url('fonts/SeasonMix-Regular.woff2') format('woff2');
+    font-weight: 400 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Stavok Grotesque';
+    src: url('fonts/StavokGrotesque-Regular.woff2') format('woff2');
+    font-weight: 400 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
   /* ============================================================
      Design tokens — ported from main site global.css
      ============================================================ */
@@ -32,8 +50,9 @@
     --rule:         rgba(0, 0, 0, 0.08);
     --rule-strong:  rgba(0, 0, 0, 0.15);
 
-    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --serif: 'Season Mix', Georgia, 'Times New Roman', serif;
     --sans:  'DM Sans', system-ui, -apple-system, sans-serif;
+    --eyebrow: 'Stavok Grotesque', 'DM Sans', system-ui, sans-serif;
 
     --tracking-tight:        -0.02em;
     --tracking-snug:         -0.015em;
@@ -59,10 +78,10 @@
   }
 
   body {
-    /* DM Sans body — Cormorant Garamond is reserved for the
-       large display headings (page h2, moment-title section
-       heads, confirm h3, decorative italic numerals). DM Sans
-       reads materially better at body-copy sizes. */
+    /* DM Sans body — Season Mix is reserved for the large display
+       headings (page h2, moment-title section heads, confirm h3,
+       decorative numerals). DM Sans reads materially better at
+       body-copy sizes. */
     font-family: var(--sans);
     font-size: 16px;
     font-weight: 400;
@@ -85,27 +104,22 @@
      ============================================================ */
   .progress-bar {
     display: flex;
+    justify-content: space-between;
     margin: 0 0 4rem;
     border-bottom: 1px solid var(--rule);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .progress-bar::-webkit-scrollbar {
-    display: none;
   }
   .progress-step {
-    flex: 1 0 auto;
-    padding: 14px 12px;
+    flex: 0 0 auto;
+    padding: 14px 0;
     border: none;
     border-bottom: 1px solid transparent;
     margin-bottom: -1px;
     background: transparent;
     color: var(--mid);
-    font-family: var(--sans);
-    font-size: 11px;
+    font-family: var(--eyebrow);
+    font-size: 10px;
     font-weight: 400;
-    letter-spacing: var(--tracking-eyebrow);
+    letter-spacing: 0.10em;
     text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
@@ -145,7 +159,7 @@
   .eyebrow {
     display: block;
     margin-bottom: 1rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 400;
     letter-spacing: var(--tracking-eyebrow-wide);
@@ -162,7 +176,7 @@
     color: var(--black);
   }
   .screen h2 em {
-    font-style: italic;
+    font-style: normal;
   }
   /* :where() drops specificity to (0,0,1) so class-based h3
      rules (.film-title sans, .moment-title serif, .confirm h3
@@ -208,10 +222,6 @@
 
   /* ============================================================
      Alert block — warning register
-     Soft cream surface with a deep amber accent strip on the
-     left. Editorial, not an alert banner; no icon. The accent
-     hex is tied to the title colour so the semantic signal
-     reads at a glance.
      ============================================================ */
   .alert {
     margin: 2rem 0;
@@ -264,7 +274,7 @@
     display: block;
     margin-bottom: 0.5rem;
     font-family: var(--serif);
-    font-style: italic;
+    font-style: normal;
     font-size: 26px;
     font-weight: 400;
     line-height: 1;
@@ -288,11 +298,6 @@
 
   /* ============================================================
      Comparison — Cannot use / Can use
-     Two color-coded blocks. Color IS the semantic signal: blush
-     for can't-use (terracotta accent), sage for can-use (forest
-     green accent). Editorial, not alert banners — no icons.
-     Column title takes the accent colour so the hierarchy reads
-     at a glance.
      ============================================================ */
   .comparison {
     display: grid;
@@ -321,7 +326,7 @@
   .comparison-col-title {
     display: block;
     margin-bottom: 0.75rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: var(--tracking-eyebrow-wide);
@@ -356,8 +361,6 @@
 
   /* ============================================================
      Platform pick-cards — 3-up grid
-     Currently a visual selection only (no persisted state),
-     mirroring the original UX. Clean editorial treatment.
      ============================================================ */
   .platforms {
     display: grid;
@@ -393,7 +396,7 @@
   .platform-eyebrow {
     display: block;
     margin-bottom: 0.4rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 10px;
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
@@ -481,7 +484,7 @@
     color: var(--fg-prose);
   }
   .browse-tags {
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 10px;
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
@@ -498,7 +501,7 @@
   }
   .tip-title {
     margin: 0 0 0.4rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: var(--tracking-eyebrow-wide);
@@ -534,7 +537,7 @@
   .film-label {
     display: block;
     margin-bottom: 0.4rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: var(--tracking-eyebrow-wide);
@@ -558,11 +561,7 @@
   }
 
   /* ============================================================
-     Moment sections — input groupings for highlight + social +
-     review's "Your details". Warm-tinted card containers so the
-     interactive region is visually distinct from the page body.
-     Subtle hairline border for definition; the tint does the
-     primary signalling work.
+     Moment sections
      ============================================================ */
   .moment-sections {
     display: flex;
@@ -576,12 +575,6 @@
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 6px;
   }
-  /* Intro paragraphs that sit between the moment header and the
-     form (Social Film's licensing note is the only current case)
-     pick up margin-bottom: 0 from the global
-     `:where(.screen) p:last-of-type` rule because they are the
-     last <p> inside the .moment. Restore breathing room here so
-     the first form label doesn't crash into the paragraph above. */
   .moment > p {
     margin-bottom: 1.5rem;
   }
@@ -591,7 +584,7 @@
   .moment-eyebrow {
     display: block;
     margin-bottom: 0.5rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: var(--tracking-eyebrow-wide);
@@ -618,8 +611,7 @@
   }
 
   /* ============================================================
-     Form inputs — hairline-below treatment (matches main site
-     contact form)
+     Form inputs — hairline-below treatment
      ============================================================ */
   .form-stack {
     display: flex;
@@ -630,13 +622,10 @@
     display: flex;
     flex-direction: column;
   }
-  /* Labels slightly more prominent than default eyebrow style —
-     weight 500 + black colour — so input groupings inside the
-     tinted card region read as actionable. */
   .field-label {
     display: block;
     margin-bottom: 0.5rem;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: var(--tracking-eyebrow);
@@ -749,7 +738,7 @@
     padding: 5px 12px;
     border-radius: 999px;
     background: var(--bg-tonal);
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
@@ -758,10 +747,6 @@
 
   /* ============================================================
      Review screen — summary cards + confirm
-     Each summary-block sits in its own warm-grey card so the
-     review reads as a series of discrete, editable sections.
-     Same card register as Step 4's moment cards, distinct from
-     the warm color blocks on Step 2.
      ============================================================ */
   .summary {
     margin: 2rem 0;
@@ -775,9 +760,6 @@
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 6px;
   }
-  /* Header row at the top of each block: eyebrow on the left,
-     optional Edit link on the right. Aligned by baseline so the
-     two read as a single typographic row. */
   .summary-block-header {
     display: flex;
     align-items: baseline;
@@ -787,17 +769,13 @@
   }
   .summary-label {
     display: block;
-    font-family: var(--sans);
+    font-family: var(--eyebrow);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: var(--tracking-eyebrow-wide);
     text-transform: uppercase;
     color: var(--mid);
   }
-  /* Edit link — quiet sans link, hover darkens. Only the film
-     summary blocks (Highlight, Social) get one in JS; "Your
-     details" doesn't because its input is on the same screen
-     above the summary. */
   .summary-edit {
     margin: 0;
     padding: 0;
@@ -870,12 +848,6 @@
   /* ============================================================
      Buttons — pill, primary dark / secondary outlined
      ============================================================ */
-  /* Footer button row — Back left, primary action right.
-     justify-content: space-between anchors the two buttons to
-     opposite edges so the long primary label ("Submit to your
-     videographer") doesn't float toward centre. Single-button
-     rows (Step 1) keep the lone button at flex-start, which is
-     fine — space-between has no effect on a single child. */
   .btn-row {
     display: flex;
     align-items: center;
@@ -930,12 +902,6 @@
 
   /* ============================================================
      Success screen — full-viewport confirmation after submit
-     Centred vertically against ~70vh so the message sits in the
-     reader's eyeline rather than hugging the top. A short hairline
-     above the title is the editorial flourish — matches the
-     `.summary-row` + `.btn-row` border-tops used throughout, so
-     the page doesn't suddenly introduce a new ornament register
-     (no ticks, no confetti).
      ============================================================ */
   .success-screen.visible {
     display: flex;
@@ -965,7 +931,7 @@
     color: var(--black);
   }
   .success-title em {
-    font-style: italic;
+    font-style: normal;
   }
   .success-body {
     margin: 0 0 2rem;
@@ -992,32 +958,24 @@
 
   /* ============================================================
      Mobile — progress bar scroll behaviour
-     Under 640px the five-step strip can't fit one row without
-     truncating tab labels. Switch to a horizontal scroll with
-     snap, larger tap targets, and a fade mask hint on the edges
-     so the affordance reads. The fade mask classes
-     (.has-overflow-left / -right) are toggled by JS depending on
-     scroll position; the CSS rule order resolves the combined
-     "both edges" state via higher specificity.
      ============================================================ */
   @media (max-width: 640px) {
+    .progress-bar {
+      justify-content: flex-start;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .progress-bar::-webkit-scrollbar {
+      display: none;
+    }
     .progress-step {
-      /* `flex: 0 0 auto` instead of `1 0 auto` — tabs no longer
-         try to share the bar width equally; each sits at its
-         natural label width so nothing truncates. */
       flex: 0 0 auto;
       padding: 16px 1rem;
-      min-height: 44px;             /* HIG-comfortable tap target */
+      min-height: 44px;
       scroll-snap-align: start;
     }
-    .progress-bar {
-      scroll-snap-type: x mandatory;
-    }
-    /* Edge fades. Default state (at the left edge of scroll) shows
-       a right-side fade so the user sees there's more content.
-       Once scrolled past start, JS adds .has-overflow-left and a
-       left fade joins. At the far right, .has-overflow-right comes
-       off and the right fade disappears. */
     .progress-bar.has-overflow-right {
       -webkit-mask-image: linear-gradient(
         to right,
@@ -1383,17 +1341,13 @@
     </div>
   </section>
 
-  <!-- Screen success: full-page confirmation after a successful
-       submit. Sits as a sibling of the numbered screens so the
-       existing .screen visibility plumbing treats it like any
-       other step — the only difference is the progress bar hides
-       because the journey is finished. -->
+  <!-- Screen success -->
   <section class="screen success-screen" id="screenSuccess">
     <div class="success-state">
       <span class="success-rule" aria-hidden="true"></span>
       <h2 class="success-title">Brief <em>sent.</em></h2>
       <p class="success-body">We've received your music selections and will be in touch before your next call.</p>
-      <a class="success-link" href="https://seaoflovefilm.co">Back to seaoflovefilm.co</a>
+      <a class="success-link" href="https://seaoflove.com.au">Back to seaoflove.com.au</a>
     </div>
   </section>
 
@@ -1425,13 +1379,6 @@
     if (n === 4) buildSummary();
   }
 
-  /* Brings the active tab into view inside the (mobile-only)
-     scrollable progress bar. Centred horizontally with
-     block:'nearest' so the page itself doesn't get pulled into a
-     vertical re-scroll (goTo also calls window.scrollTo({top:0})
-     separately and we want those to be independent). Gated to the
-     <=640px breakpoint — desktop keeps the static tab strip and
-     would otherwise do an unnecessary scroll. */
   function scrollActiveTabIntoView(n) {
     if (!window.matchMedia || !window.matchMedia('(max-width: 640px)').matches) return;
     var tab = document.querySelectorAll('.progress-step')[n];
@@ -1439,11 +1386,6 @@
     tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 
-  /* Toggles edge-fade classes on the progress bar based on its
-     scroll position. has-overflow-left appears when scrolled past
-     the start; has-overflow-right disappears when scrolled to the
-     end. CSS uses these to swap mask-image gradients. Fires on
-     scroll (passive), resize, and initial load. */
   function updateProgressBarOverflow() {
     var bar = document.getElementById('progressBar');
     if (!bar) return;
@@ -1457,7 +1399,6 @@
     if (!bar) return;
     bar.addEventListener('scroll', updateProgressBarOverflow, { passive: true });
     window.addEventListener('resize', updateProgressBarOverflow);
-    /* Run on next frame so the layout's settled before measuring. */
     requestAnimationFrame(updateProgressBarOverflow);
   })();
 
@@ -1473,22 +1414,11 @@
     row.setAttribute('aria-pressed', highlightData.leaveIt ? 'true' : 'false');
   }
 
-  /* Called from the Your Details inputs (oninput / onchange).
-     Re-renders the live summary AND re-checks whether the submit
-     button can be enabled. The Your Details inputs and the
-     summary both live on Screen 4, so typing in the inputs
-     should update the summary in real time — the previous
-     binding only set state, never re-rendered. */
   function onCoupleChange() {
     buildSummary();
     updateSubmitState();
   }
 
-  /* Submit button gating: stays disabled until both names + a
-     valid wedding date are filled. Highlight Film / Social Film
-     inputs aren't required to submit because either screen can
-     legitimately be left blank (we'll choose for them) — only
-     the couple identity is a hard requirement. */
   function updateSubmitState() {
     var btn = document.getElementById('submitBtn');
     if (!btn) return;
@@ -1531,10 +1461,6 @@
       '<div class="summary-row"><span class="summary-row-key">Song request</span><span class="summary-row-val">' + socialSong + '</span></div>' +
       '<div class="summary-row"><span class="summary-row-key">Notes</span><span class="summary-row-val">' + socialNotes + '</span></div>' +
       '</div>';
-    /* Keep submit gating in sync with the rendered summary so
-       the button can flip enabled the moment both fields are
-       valid, regardless of whether the user typed on Screen 4
-       or arrived with state already in memory. */
     updateSubmitState();
   }
 
@@ -1560,12 +1486,6 @@
     ].join('\n');
   }
 
-  /* Full-page success state — hides every numbered screen and
-     the progress bar, then surfaces the dedicated #screenSuccess.
-     The dedicated screen has its own .visible styles that take
-     over the viewport and centre the message, so this is the
-     only end-of-flow handler needed; no inline DOM rewriting of
-     the .confirm block like the old "Brief sent." path did. */
   function showSuccess() {
     document.querySelectorAll('.screen').forEach(function (s) {
       s.classList.remove('visible');
